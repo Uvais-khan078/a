@@ -1,7 +1,9 @@
 import { createSelector } from "reselect";
+import { Actor } from "./models/actors";
 import { State } from "./store";
 
 export const showStateSelector = (s: State) => s.shows;
+export const actorStateSelector = (s: State) => s.actors;
 
 export const showsEntitiesSelector = createSelector(
   showStateSelector,
@@ -31,4 +33,27 @@ export const showsSelector = createSelector(
 export const showLoadingSelector = createSelector(
   showStateSelector,
   (showState) => showState.showLoading
+);
+
+export const actorEntitiesSelector = createSelector(
+  actorStateSelector,
+  (actorState) => actorState.entites
+);
+
+export const showActorIdsSelector = createSelector(
+  showStateSelector,
+  (showState) => showState.actors
+);
+
+export const showActorsSelector = createSelector(
+  showActorIdsSelector,
+  actorEntitiesSelector,
+  (showActorIds, actorEntities) => {
+    const data = Object.keys(showActorIds).reduce((showActors, showId) => {
+      const actorIds = showActorIds[+showId];
+      const actors = actorIds.map((id) => actorEntities[id]);
+      return { ...showActors, [+showId]: actors };
+    }, {});
+    return data as { [id: number]: Actor[] };
+  }
 );
