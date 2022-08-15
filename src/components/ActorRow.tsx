@@ -23,7 +23,7 @@ const ShowRow: FC<ActorRowProps> = ({ actor }) => {
             <h3 className="text-xl">
               Nationality:-
               <span className="pl-1" />
-              {actor.country.name}
+              {actor.country?.name}
             </h3>
             <h3 className="text-xl">
               DOB:-
